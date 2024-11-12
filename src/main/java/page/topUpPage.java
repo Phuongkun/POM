@@ -149,9 +149,10 @@ public class topUpPage extends basePage {
         }
 
     }
-    public topUpPage(WebDriver driver, BrowserMobProxyServer proxyServer) {
+    public topUpPage(WebDriver driver, BrowserMobProxyServer proxyServer,paymentQRPage paymentQR) {
         super(driver);
         this.proxyServer = proxyServer;
+        this.paymentQR = paymentQR;
     }
     // Hàm để lấy số dư hiện tại
     public int getWalletBalance() {
@@ -184,6 +185,9 @@ public class topUpPage extends basePage {
         Thread.sleep(5000);
         getWebDriverWait().until(ExpectedConditions.visibilityOf(menuTopup));
         menuTopup.click();
+        // Lấy số dư hiện tại trước khi nạp tiền
+        int initialBalance = getWalletBalance();
+        int topupAmount = Integer.parseInt(amountValue);
 
         getWebDriverWait().until(ExpectedConditions.visibilityOf(btnTopup));
         btnTopup.click();
@@ -198,14 +202,12 @@ public class topUpPage extends basePage {
         wait.until(ExpectedConditions.visibilityOf(btnContinue));
         wait.until(ExpectedConditions.elementToBeClickable(btnContinue));
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btnContinue);
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
         // Retrieve orderId after the request is sent
         paymentQR.actionPay();
         // Lấy số dư hiện tại sau khi nạp tiền
         int finalBalance = getWalletBalance();
-// Lấy số dư hiện tại trước khi nạp tiền
-        int initialBalance = getWalletBalance();
-        int topupAmount = Integer.parseInt(amountValue);
+
         // Kiểm tra số dư
         if (finalBalance == initialBalance + topupAmount) {
             System.out.println("Nạp tiền thành công. Số dư hiện tại: " + finalBalance);
@@ -216,4 +218,4 @@ public class topUpPage extends basePage {
 
     }
 
-}
+

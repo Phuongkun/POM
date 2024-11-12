@@ -167,6 +167,7 @@ public class paymentQRPage extends basePage {
         this.proxyServer = proxyServer;
     }
     public void actionPay() throws IOException, InterruptedException {
+        Thread.sleep(5000);
         // Lấy HAR và xử lý
         if (proxyServer != null && proxyServer.isStarted()) {
 
@@ -190,8 +191,14 @@ public class paymentQRPage extends basePage {
             }
         }
 
-        Thread.sleep(15000);
+        Thread.sleep(5000);
+    // Chờ đến khi biểu tượng thanh toán xuất hiện và hiển thị
+        getWebDriverWait().until(ExpectedConditions.visibilityOf(paymentLogo));
+        assert paymentLogo.isDisplayed();
 
+        getWebDriverWait().until(ExpectedConditions.visibilityOf(btncompleted));
+        btncompleted.click();
+        Thread.sleep(5000);
     }
     private String parseKfRequestIdFromResponse(String responseBody, String field) {
         // Parse the responseBody thành JsonObject
@@ -279,10 +286,6 @@ public class paymentQRPage extends basePage {
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonRequest = objectMapper.writeValueAsString(request);
         System.out.println(jsonRequest);
-        // Chờ đến khi biểu tượng thanh toán xuất hiện và hiển thị
-        getWebDriverWait().until(ExpectedConditions.visibilityOf(paymentLogo));
-        assert paymentLogo.isDisplayed();
-        getWebDriverWait().until(ExpectedConditions.visibilityOf(btncompleted));
-        btncompleted.click();
+
     }
 }
