@@ -10,8 +10,8 @@ public class loginPageTest extends baseTest {
     @Test
     public void loginUser(){
        loginPage loginPage= new loginPage(getDriver());
-        loginPage.navigateToLogin("https://retaildev03.kvpos.com/man/#/login");
-        loginPage.login("admin","kiotviet123456");
+        loginPage.navigateToLogin("https:****************");
+        loginPage.login("***","*****");
 
 
     }
