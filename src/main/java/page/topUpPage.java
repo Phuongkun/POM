@@ -40,7 +40,8 @@ public class topUpPage extends basePage {
     private WebElement paymentLogo;
     @FindBy(xpath = "//button[@class=\"btn payment-full-btn-success\"]")
     private WebElement btncompleted;
-
+    @FindBy(xpath = "//div[@class='cash-info-amount']")
+    private WebElement walletBalance;
     private BrowserMobProxyServer proxyServer;
     private WebDriverWait wait;
     public class webhook {
@@ -152,6 +153,27 @@ public class topUpPage extends basePage {
         super(driver);
         this.proxyServer = proxyServer;
     }
+    // Hàm để lấy số dư hiện tại
+    public int getWalletBalance() {
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        String balanceText;
+        try {
+            WebElement walletBalance = wait.until(ExpectedConditions.visibilityOf(this.walletBalance));
+            balanceText = walletBalance.getText();
+
+            if (balanceText.isEmpty()) {
+                System.out.println("Không lấy được số dư ví. Vui lòng kiểm tra lại phần tử walletBalance.");
+                return 0;  // Trả về giá trị mặc định nếu cần
+            }
+
+            balanceText = balanceText.replaceAll("[^0-9]", "");
+            return Integer.parseInt(balanceText);
+
+        } catch (Exception e) {
+            System.out.println("Lỗi khi lấy số dư ví: " + e.getMessage());
+            return 0;
+        }
+    }
     // Hàm WebDriverWait có thời gian chờ được khởi tạo
     public WebDriverWait getWebDriverWait() {
         return new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -179,6 +201,18 @@ public class topUpPage extends basePage {
         Thread.sleep(5000);
         // Retrieve orderId after the request is sent
         paymentQR.actionPay();
+        // Lấy số dư hiện tại sau khi nạp tiền
+        int finalBalance = getWalletBalance();
+// Lấy số dư hiện tại trước khi nạp tiền
+        int initialBalance = getWalletBalance();
+        int topupAmount = Integer.parseInt(amountValue);
+        // Kiểm tra số dư
+        if (finalBalance == initialBalance + topupAmount) {
+            System.out.println("Nạp tiền thành công. Số dư hiện tại: " + finalBalance);
+        } else {
+            System.out.println("Nạp tiền thất bại hoặc số dư không khớp. Số dư hiện tại: " + finalBalance);
+        }
+    }
 
     }
 
