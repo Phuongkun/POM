@@ -1,13 +1,7 @@
 package page;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import core.basePage;
-import io.restassured.response.Response;
+import core.BasePage;
 import net.lightbody.bmp.BrowserMobProxyServer;
-import net.lightbody.bmp.core.har.Har;
-import net.lightbody.bmp.core.har.HarEntry;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,30 +10,28 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Optional;
-import java.util.Random;
+
 import static io.restassured.RestAssured.given;
-public class topUpPage extends basePage {
-    private paymentQRPage paymentQR;
-    @FindBy(xpath = "(//div[@class='menu-profile']/li)[6]")
+public class TopUpPage extends LoginPage {
+
+    private PaymentQRPage paymentQR;
+    @FindBy(xpath = "//div[@class='kma-sidebar']/ul/li[6]")
     private WebElement menuTopup;
 
-    @FindBy(xpath = "//button[@class='btn-topup btn-success']")
+    @FindBy(xpath = "//button[text()='Nạp tiền']")
     private WebElement btnTopup;
 
-    @FindBy(xpath = "(//button[@class='btn btn-primary'])[2]")
+    @FindBy(xpath = "//button[text()='Nạp ngay']")
     private WebElement selectTopup;
 
     @FindBy(xpath = "//div[@class='cash-form-money d-flex']/input")
     private WebElement inputAmount;
 
-    @FindBy(xpath = "//button[@class='btn btn-pay']")
+    @FindBy(xpath = "//button[text()='Tiếp tục nạp tiền']")
     private WebElement btnContinue;
 
     @FindBy(className = "payment-full-logo")
     private WebElement paymentLogo;
-    @FindBy(xpath = "//button[@class=\"btn payment-full-btn-success\"]")
-    private WebElement btncompleted;
     @FindBy(xpath = "//div[@class='cash-info-amount']")
     private WebElement walletBalance;
     private BrowserMobProxyServer proxyServer;
@@ -149,11 +141,12 @@ public class topUpPage extends basePage {
         }
 
     }
-    public topUpPage(WebDriver driver, BrowserMobProxyServer proxyServer,paymentQRPage paymentQR) {
+    public TopUpPage (WebDriver driver, BrowserMobProxyServer proxyServer, PaymentQRPage paymentQR) {
         super(driver);
         this.proxyServer = proxyServer;
         this.paymentQR = paymentQR;
     }
+
     // Hàm để lấy số dư hiện tại
     public int getWalletBalance() {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -182,9 +175,10 @@ public class topUpPage extends basePage {
     public void actionTopup(String amountValue) throws IOException, InterruptedException {
         proxyServer.newHar("topup-har");
         // Wait and click on the top-up menu
-        Thread.sleep(5000);
+        Thread.sleep(7000);
         getWebDriverWait().until(ExpectedConditions.visibilityOf(menuTopup));
         menuTopup.click();
+
         // Lấy số dư hiện tại trước khi nạp tiền
         int initialBalance = getWalletBalance();
         int topupAmount = Integer.parseInt(amountValue);

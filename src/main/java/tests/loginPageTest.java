@@ -1,16 +1,14 @@
 package tests;
 
-import core.baseTest;
+import core.BaseTest;
 import org.testng.annotations.Test;
-import page.loginPage;
+import page.LoginPage;
 
-import java.io.IOException;
-
-public class loginPageTest extends baseTest {
+public class LoginPageTest extends BaseTest {
     @Test
     public void loginUser(){
-       loginPage loginPage= new loginPage(getDriver());
-        loginPage.navigateToLogin("https://retaildev03.kvpos.com/man/#/login");
+       LoginPage loginPage= new LoginPage(getDriver());
+        loginPage.navigateToLogin("https://retaildev03.kvpos.com/man/#/");
         loginPage.login("admin","kiotviet123456");
 
 

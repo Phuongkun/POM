@@ -13,7 +13,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeTest;
 
 import net.lightbody.bmp.BrowserMobProxyServer;
-public class baseTest {
+public class BaseTest {
     public WebDriver driver;
     public BrowserMobProxyServer proxy;
     private WebDriverWait webDriverWait;
@@ -25,7 +25,7 @@ public class baseTest {
             proxy.enableHarCaptureTypes(CaptureType.REQUEST_CONTENT, CaptureType.RESPONSE_CONTENT);
 
             proxy.start(0); // Sử dụng cổng ngẫu nhiên
-// Kiểm tra xem proxy đã khởi động thành công hay chưa
+            // Kiểm tra xem proxy đã khởi động thành công hay chưa
             if (proxy.isStarted()) {
                 System.out.println("Proxy started successfully on port: " + proxy.getPort());
             } else {
